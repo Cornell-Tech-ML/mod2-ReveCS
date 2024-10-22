@@ -218,7 +218,9 @@ class Mul(Function):
 
         """
         (t1, t2) = ctx.saved_values
-        return grad_output.f.mul_zip(t1, grad_output), grad_output.f.mul_zip(t2, grad_output)
+        return grad_output.f.mul_zip(t2, grad_output), grad_output.f.mul_zip(
+            t1, grad_output
+        )
 
 
 class Sigmoid(Function):
@@ -256,7 +258,9 @@ class Sigmoid(Function):
         (t1,) = ctx.saved_values
         sigmoid_t1 = t1.f.sigmoid_map(t1)
         neg_sig = sigmoid_t1.f.neg_map(sigmoid_t1)
-        return grad_output.f.mul_zip(sigmoid_t1.f.mul_zip(sigmoid_t1, 1 + neg_sig), grad_output)
+        return grad_output.f.mul_zip(
+            sigmoid_t1.f.mul_zip(sigmoid_t1, 1 + neg_sig), grad_output
+        )
 
 
 class ReLU(Function):
@@ -375,7 +379,7 @@ class Sum(Function):
         Args:
         ----
             ctx: The context in which the operation is performed.
-            a: The input tensor.
+            t1: The input tensor.
             dim: The dimension along which to compute the sum. If None, computes the sum over all dimensions.
 
         Returns:
@@ -390,7 +394,7 @@ class Sum(Function):
         return t1.f.add_reduce(t1, dim_val)
 
     @staticmethod
-    def backward(ctx: Context, grad_output: Tensor) -> Tensor:
+    def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
         """Computes the gradients of the sum operation with respect to the input tensor.
 
         Args:
@@ -403,7 +407,7 @@ class Sum(Function):
             Tensor: The gradient of the sum operation with respect to the input tensor.
 
         """
-        return grad_output, 0.0
+        return (grad_output, 0.0)
 
 
 class LT(Function):
@@ -501,26 +505,26 @@ class IsClose(Function):
 
 class Permute(Function):
     @staticmethod
-    def forward(ctx: Context, t1: Tensor, *dims: int) -> Tensor:
+    def forward(ctx: Context, t1: Tensor, dim: Tensor) -> Tensor:
         """Permutes the dimensions of the input tensor according to the specified dimensions.
 
         Args:
         ----
             ctx: The context in which the operation is performed.
             t1: The input tensor.
-            *dims: The dimensions to permute the tensor by.
+            dim: The dimensions to permute the tensor by.
 
         Returns:
         -------
             Tensor: The permuted tensor.
 
         """
-        ctx.save_for_backward(dims)
-        int_dim = list(map(int, dims._tensor._storage))
+        ctx.save_for_backward(dim)
+        int_dim = list(map(int, dim._tensor._storage))
         return t1._new(t1._tensor.permute(*int_dim))
 
     @staticmethod
-    def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
+    def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
         """Computes the gradients of the permutation operation with respect to the input tensor.
 
         Args:

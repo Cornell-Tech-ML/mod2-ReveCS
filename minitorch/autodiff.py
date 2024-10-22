@@ -162,7 +162,7 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     # TODO: Implement for Task 1.4.
     # Perform a topological sort on the computation graph to visit nodes in reverse order
     topo_order = topological_sort(variable)
-    derivatives = {variable.unique_id: deriv} 
+    derivatives = {variable.unique_id: deriv}
 
     for v in topo_order:
         deriv = derivatives[v.unique_id]
@@ -173,7 +173,9 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
                 if parent.is_constant():
                     continue
                 derivatives.setdefault(parent.unique_id, 0.0)
-                derivatives[parent.unique_id] = derivatives[parent.unique_id] + parent_deriv
+                derivatives[parent.unique_id] = (
+                    derivatives[parent.unique_id] + parent_deriv
+                )
 
     # derivatives.clear()
     # raise NotImplementedError("Need to implement for Task 1.4")

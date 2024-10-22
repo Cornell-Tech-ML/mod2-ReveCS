@@ -28,6 +28,7 @@ from .tensor_functions import (
     ReLU,
     Sigmoid,
     Sum,
+    Permute,
     View,
     tensor,
 )
@@ -488,7 +489,7 @@ class Tensor:
 
     def permute(self, *dims: Optional[int]) -> Tensor:
         """Permute the dimensions of the tensor."""
-        return View.apply(self, tensor(list(dims)))
+        return Permute.apply(self, tensor(list(dims)))
 
     def view(self, *dims: Optional[int]) -> Tensor:
         """View the tensor with a new shape."""
