@@ -17,3 +17,27 @@ python sync_previous_module.py previous-module-dir current-module-dir
 The files that will be synced are:
 
         minitorch/operators.py minitorch/module.py minitorch/autodiff.py minitorch/scalar.py minitorch/scalar_functions.py minitorch/module.py project/run_manual.py project/run_scalar.py project/datasets.py
+
+# Simple
+
+![alt text](<images/Simple_Plot.png>)
+![alt text](<images/Simple_Graph.png>)
+![alt text](<images/Simple_Log.png>)
+
+
+# Diag
+
+![alt text](<images/Diag_Plot.png>)
+![alt text](<images/Diag_Graph.png>)
+![alt text](<images/Diag_Log.png>)
+
+# Split
+
+![alt text](<images/Split_Plot.png>)
+![alt text](<images/Split_Graph.png>)
+![alt text](<images/Split_Log.png>)
+
+# Xor
+![alt text](<images/Xor_Plot.png>)
+![alt text](<images/Xor_Graph.png>)
+![alt text](<images/Xor_Log.png>)
